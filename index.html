@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMK ABDEL SCHOOL</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .slide-fade {
+            transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
+        }
+        @keyframes progress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+        .animate-progress {
+            animation: progress 4.5s linear infinite;
+        }
+        .paused {
+            animation-play-state: paused !important;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col selection:bg-brand-500 selection:text-white">
+
+    <!-- TOP BAR -->
+    <div class="bg-brand-900 text-slate-300 text-xs py-2 px-4">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+            <div class="flex items-center gap-4">
+                <span class="flex items-center gap-1.5"><i data-lucide="phone" class="w-3.5 h-3.5 text-brand-500"></i> (021) 555-0199</span>
+                <span class="flex items-center gap-1.5"><i data-lucide="mail" class="w-3.5 h-3.5 text-brand-500"></i> info@smkabdel.sch.id</span>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="bg-brand-800/80 text-brand-100 text-[10px] font-semibold px-2 py-0.5 rounded-full border border-brand-700">Akreditasi A</span>
+                <button onclick="toggleCustomizer()" class="flex items-center gap-1 text-amber-400 hover:text-amber-300 font-medium transition">
+                    <i data-lucide="settings" class="w-3.5 h-3.5"></i> Edit Tampilan (Upload Foto)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo & School Name -->
+                <a href="#" onclick="switchTab('beranda')" class="flex items-center gap-3 group">
+                    <img id="header-logo" src="1.jfif" alt="Logo" class="w-12 h-12 object-contain rounded-xl bg-brand-50 p-1 border border-brand-100 group-hover:scale-105 transition duration-300">
+                    <div>
+                        <span id="header-school-name" class="block font-bold text-lg sm:text-xl text-slate-900 tracking-tight leading-none">SMK ABDEL SCHOOL</span>
+                        <span class="text-xs text-slate-500 font-medium tracking-wide uppercase">Unggul, Berkarakter & Berprestasi</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Navigation -->
+                <nav class="hidden lg:flex items-center gap-1">
+                    <button onclick="switchTab('beranda')" id="nav-beranda" class="nav-btn px-3.5 py-2 rounded-lg text-sm font-semibold transition text-brand-600 bg-brand-50">Beranda</button>
+                    <button onclick="switchTab('profil')" id="nav-profil" class="nav-btn px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition">Profil</button>
+                    <button onclick="switchTab('akademik')" id="nav-akademik" class="nav-btn px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition">Akademik</button>
+                    <button onclick="switchTab('kesiswaan')" id="nav-kesiswaan" class="nav-btn px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition">Kesiswaan</button>
+                    <button onclick="switchTab('ppdb')" id="nav-ppdb" class="nav-btn px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition">PPDB</button>
+                    <button onclick="switchTab('portal')" id="nav-portal" class="ml-3 px-4 py-2 rounded-lg text-sm font-semibold bg-brand-600 text-white hover:bg-brand-700 shadow-sm shadow-brand-500/20 transition flex items-center gap-2">
+                        <i data-lucide="user-check" class="w-4 h-4"></i> Portal Siswa
+                    </button>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <button onclick="toggleMobileMenu()" class="lg:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Drawer -->
+        <div id="mobile-menu" class="hidden lg:hidden border-t border-slate-200 bg-white px-4 py-3 space-y-1">
+            <button onclick="switchTab('beranda')" class="block w-full text-left px-3 py-2 rounded-md font-medium text-slate-700 hover:bg-slate-50">Beranda</button>
+            <button onclick="switchTab('profil')" class="block w-full text-left px-3 py-2 rounded-md font-medium text-slate-700 hover:bg-slate-50">Profil</button>
+            <button onclick="switchTab('akademik')" class="block w-full text-left px-3 py-2 rounded-md font-medium text-slate-700 hover:bg-slate-50">Akademik</button>
+            <button onclick="switchTab('kesiswaan')" class="block w-full text-left px-3 py-2 rounded-md font-medium text-slate-700 hover:bg-slate-50">Kesiswaan</button>
+            <button onclick="switchTab('ppdb')" class="block w-full text-left px-3 py-2 rounded-md font-medium text-slate-700 hover:bg-slate-50">PPDB Pendaftaran</button>
+            <button onclick="switchTab('portal')" class="block w-full text-left px-3 py-2 rounded-md font-semibold text-brand-600 bg-brand-50">Portal Akademik</button>
+        </div>
+    </header>
+
+    <!-- CUSTOMIZER MODAL / PANEL UPLOAD FOTO -->
+    <div id="customizer-panel" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex justify-end">
+        <div class="bg-white w-full max-w-md h-full shadow-2xl flex flex-col p-6 overflow-y-auto">
+            <div class="flex items-center justify-between border-b pb-4 mb-4">
+                <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                    <i data-lucide="sliders" class="w-5 h-5 text-brand-600"></i> Customizer & Upload Foto
+                </h3>
+                <button onclick="toggleCustomizer()" class="text-slate-400 hover:text-slate-600 p-1">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            
+            <p class="text-xs text-slate-500 mb-6">Pilih file foto dari komputer/HP Anda atau masukkan link URL untuk mengganti tampilan secara langsung.</p>
+
+            <div class="space-y-6">
+                <!-- Nama & Logo Sekolah -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+                    <h4 class="text-xs font-bold text-slate-700 uppercase">1. Logo & Nama Sekolah</h4>
+                    <div>
+                        <label class="block text-xs text-slate-600 mb-1">Nama Sekolah</label>
+                        <input type="text" id="cust-school-name" class="w-full text-sm p-2 border rounded-lg focus:ring-2 focus:ring-brand-500 outline-none bg-white" value="SMK ABDEL SCHOOL">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-600 mb-1">Upload File Logo Sekolah</label>
+                        <input type="file" id="file-logo" accept="image/*" class="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100">
+                    </div>
+                </div>
+
+                <!-- Banner Slider 1, 2, 3 -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4">
+                    <h4 class="text-xs font-bold text-slate-700 uppercase">2. Banner Slider Foto</h4>
+                    
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Banner Slider 1 (Prestasi)</label>
+                        <input type="file" id="file-slide-0" accept="image/*" class="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Banner Slider 2 (Fasilitas)</label>
+                        <input type="file" id="file-slide-1" accept="image/*" class="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Banner Slider 3 (Ekstrakurikuler)</label>
+                        <input type="file" id="file-slide-2" accept="image/*" class="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100">
+                    </div>
+                </div>
+
+                <!-- Profil Kepala Sekolah -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+                    <h4 class="text-xs font-bold text-slate-700 uppercase">3. Profil Kepala Sekolah</h4>
+                    <div>
+                        <label class="block text-xs text-slate-600 mb-1">Nama Kepala Sekolah</label>
+                        <input type="text" id="cust-principal-name" class="w-full text-sm p-2 border rounded-lg focus:ring-2 focus:ring-brand-500 outline-none bg-white" value="Dr. H. Abdul Marix, M.Pd.">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-600 mb-1">Upload Foto Kepala Sekolah</label>
+                        <input type="file" id="file-principal-img" accept="image/*" class="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-600 mb-1">Teks Sambutan</label>
+                        <textarea id="cust-principal-speech" rows="3" class="w-full text-sm p-2 border rounded-lg focus:ring-2 focus:ring-brand-500 outline-none bg-white">Selamat datang di website resmi SMK ABDEL SCHOOL. Kami berkomitmen untuk memberikan pendidikan berkualitas tinggi, membentuk karakter generasi muda yang berintegritas, cerdas, dan berdaya saing global di era digital.</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 pt-4 border-t flex gap-3">
+                <button onclick="applyCustomizations()" class="flex-1 bg-brand-600 hover:bg-brand-700 text-white font-semibold py-2.5 rounded-lg text-sm shadow transition">Terapkan Perubahan Foto</button>
+                <button onclick="toggleCustomizer()" class="px-4 py-2.5 border rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-grow">
+        
+        <!-- ================= PAGE 1: BERANDA ================= -->
+        <div id="page-beranda" class="page-section">
+            
+            <!-- Banner Utama / Slider -->
+            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+                <div class="relative rounded-3xl overflow-hidden shadow-2xl bg-slate-900 aspect-[16/7] md:aspect-[21/8] group" id="slider-container">
+                    
+                    <!-- Progress Bar Slider -->
+                    <div class="absolute top-0 left-0 right-0 h-1 bg-white/20 z-30">
+                        <div id="slider-progress" class="h-full bg-brand-500 animate-progress"></div>
+                    </div>
+
+                    <!-- Slide Items -->
+                    <div id="slide-items-container" class="w-full h-full relative">
+                        <!-- Slide 0 -->
+                        <div class="slide-item absolute inset-0 opacity-100 transition-opacity duration-700 ease-in-out">
+                            <img id="img-slide-0" src="WhatsApp Image 2026-11-11 at 13.23.36.jpeg" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent flex items-end p-6 md:p-12">
+                                <div class="max-w-2xl text-white space-y-2">
+                                    <span class="inline-block px-3 py-1 bg-brand-600 text-xs font-semibold rounded-full tracking-wider uppercase mb-2">Prestasi Siswa</span>
+                                    <h2 class="text-2xl md:text-4xl font-extrabold leading-tight">SMK ABDEL SCHOOL</h2>
+                                    <p class="text-slate-200 text-sm md:text-base hidden sm:block">Siswa-siswi SMK ABDEL SCHOOL kembali mengukir prestasi gemilang di tingkat nasional.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 1 -->
+                        <div class="slide-item absolute inset-0 opacity-0 transition-opacity duration-700 ease-in-out">
+                            <img id="img-slide-1" src="WhatsApp Image 2026-11-11 at 13.29.07.jpeg" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent flex items-end p-6 md:p-12">
+                                <div class="max-w-2xl text-white space-y-2">
+                                    <span class="inline-block px-3 py-1 bg-emerald-600 text-xs font-semibold rounded-full tracking-wider uppercase mb-2">Fasilitas Modern</span>
+                                    <h2 class="text-2xl md:text-4xl font-extrabold leading-tight">PROMOSI SEKOLAH</h2>
+                                    <p class="text-slate-200 text-sm md:text-base hidden sm:block">Mendukung untuk mempersiapkan tantangan global.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 2 -->
+                        <div class="slide-item absolute inset-0 opacity-0 transition-opacity duration-700 ease-in-out">
+                            <img id="img-slide-2" src="WhatsApp Image 2026-11-11 at 13.34.10.jpeg" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent flex items-end p-6 md:p-12">
+                                <div class="max-w-2xl text-white space-y-2">
+                                    <span class="inline-block px-3 py-1 bg-purple-600 text-xs font-semibold rounded-full tracking-wider uppercase mb-2">Kegiatan Ekstrakurikuler</span>
+                                    <h2 class="text-2xl md:text-4xl font-extrabold leading-tight">Pengembangan Bakat & Kepemimpinan</h2>
+                                    <p class="text-slate-200 text-sm md:text-base hidden sm:block">Lebih dari 20 pilihan ekstrakurikuler untuk mengasah minat dan bakat peserta didik.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slider Controls -->
+                    <button onclick="prevSlide()" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 text-white p-3 rounded-full backdrop-blur-md transition opacity-0 group-hover:opacity-100 z-20">
+                        <i data-lucide="chevron-left" class="w-6 h-6"></i>
+                    </button>
+                    <button onclick="nextSlide()" class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 text-white p-3 rounded-full backdrop-blur-md transition opacity-0 group-hover:opacity-100 z-20">
+                        <i data-lucide="chevron-right" class="w-6 h-6"></i>
+                    </button>
+
+                    <!-- Slider Indicators -->
+                    <div class="absolute bottom-4 right-6 flex gap-2 z-20" id="slide-indicators">
+                        <button onclick="goToSlide(0)" class="w-3 h-3 rounded-full bg-white transition"></button>
+                        <button onclick="goToSlide(1)" class="w-3 h-3 rounded-full bg-white/40 transition"></button>
+                        <button onclick="goToSlide(2)" class="w-3 h-3 rounded-full bg-white/40 transition"></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sambutan Kepala Sekolah -->
+            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="bg-white rounded-3xl p-8 md:p-12 border border-slate-200/80 shadow-sm flex flex-col md:flex-row gap-8 items-center">
+                    <div class="relative shrink-0">
+                        <div class="w-44 h-52 md:w-56 md:h-64 rounded-2xl overflow-hidden shadow-lg border-4 border-white ring-1 ring-slate-200">
+                            <img id="principal-img" src="123.jpg" class="w-full h-full object-cover">
+                        </div>
+                        <div class="absolute -bottom-3 -right-3 bg-brand-600 text-white p-3 rounded-xl shadow-md">
+                            <i data-lucide="quote" class="w-6 h-6"></i>
+                        </div>
+                    </div>
+                    <div class="space-y-4 text-center md:text-left">
+                        <div class="inline-flex items-center gap-2 text-brand-600 font-bold text-sm tracking-wide uppercase">
+                            <i data-lucide="award" class="w-4 h-4"></i> Sambutan Kepala Sekolah
+                        </div>
+                        <h3 id="principal-name" class="text-2xl md:text-3xl font-extrabold text-slate-900">Dr. H. Abdul Marix, M.Pd.</h3>
+                        <p id="principal-speech" class="text-slate-600 leading-relaxed text-base italic">
+                            "Selamat datang di website resmi SMK ABDEL SCHOOL. Kami berkomitmen untuk memberikan pendidikan berkualitas tinggi, membentuk karakter generasi muda yang berintegritas, cerdas, dan berdaya saing global di era digital."
+                        </p>
+                        <div class="pt-2">
+                            <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider block">Kepala Sekolah SMK ABDEL SCHOOL</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Berita Terbaru & Kegiatan -->
+            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    
+                    <!-- Berita Terbaru (2 Columns) -->
+                    <div class="lg:col-span-2 space-y-6">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                                <i data-lucide="newspaper" class="w-6 h-6 text-brand-600"></i> Berita Terbaru
+                            </h3>
+                            <a href="#" class="text-sm font-semibold text-brand-600 hover:text-brand-700 flex items-center gap-1">Lihat Semua <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                            <!-- Card Berita 1 -->
+                            <div class="bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-md transition flex flex-col">
+                                <div class="h-40 overflow-hidden">
+                                    <img src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=400&fit=crop" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+                                </div>
+                                <div class="p-4 flex flex-col flex-grow justify-between">
+                                    <div class="space-y-2">
+                                        <span class="text-[11px] font-semibold text-brand-600 uppercase tracking-wider">Akademik</span>
+                                        <h4 class="font-bold text-slate-900 line-clamp-2 hover:text-brand-600 cursor-pointer">Pelaksanaan Asesmen Nasional Berbasis Komputer</h4>
+                                        <p class="text-xs text-slate-500 line-clamp-2">ANBK 2026 berjalan lancar dengan sistem yang terintegrasi modern.</p>
+                                    </div>
+                                    <span class="text-[10px] text-slate-400 mt-4 block">12 Mei 2026</span>
+                                </div>
+                            </div>
+
+                            <!-- Card Berita 2 -->
+                            <div class="bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-md transition flex flex-col">
+                                <div class="h-40 overflow-hidden">
+                                    <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=400&fit=crop" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+                                </div>
+                                <div class="p-4 flex flex-col flex-grow justify-between">
+                                    <div class="space-y-2">
+                                        <span class="text-[11px] font-semibold text-purple-600 uppercase tracking-wider">Kesiswaan</span>
+                                        <h4 class="font-bold text-slate-900 line-clamp-2 hover:text-brand-600 cursor-pointer">Pentas Seni & Budaya Nusantara 2026</h4>
+                                        <p class="text-xs text-slate-500 line-clamp-2">Siswa-siswi menampilkan keanekaragaman budaya daerah dengan megah.</p>
+                                    </div>
+                                    <span class="text-[10px] text-slate-400 mt-4 block">08 Mei 2026</span>
+                                </div>
+                            </div>
+
+                            <!-- Card Berita 3 -->
+                            <div class="bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-md transition flex flex-col">
+                                <div class="h-40 overflow-hidden">
+                                    <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=400&fit=crop" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+                                </div>
+                                <div class="p-4 flex flex-col flex-grow justify-between">
+                                    <div class="space-y-2">
+                                        <span class="text-[11px] font-semibold text-emerald-600 uppercase tracking-wider">Fasilitas</span>
+                                        <h4 class="font-bold text-slate-900 line-clamp-2 hover:text-brand-600 cursor-pointer">Peresmian Perpustakaan Digital Baru</h4>
+                                        <p class="text-xs text-slate-500 line-clamp-2">Akses ribuan e-book gratis untuk seluruh civitas akademika sekolah.</p>
+                                    </div>
+                                    <span class="text-[10px] text-slate-400 mt-4 block">02 Mei 2026</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar: Kegiatan Mendatang (Ekskul & OSIS) -->
+                    <div class="space-y-6">
+                        <h3 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                            <i data-lucide="calendar" class="w-6 h-6 text-brand-600"></i> Kegiatan Mendatang
+                        </h3>
+                        
+                        <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm space-y-5">
+                            <!-- Section Ekstrakurikuler -->
+                            <div>
+                                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-1.5">
+                                    <i data-lucide="activity" class="w-4 h-4 text-brand-500"></i> Ekstrakurikuler
+                                </h4>
+                                <ul class="space-y-3">
+                                    <li class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 rounded-lg bg-brand-100 text-brand-700 flex items-center justify-center font-bold text-xs">P</div>
+                                            <div>
+                                                <p class="text-sm font-semibold text-slate-800">Latihan Rutin Pramuka</p>
+                                                <p class="text-xs text-slate-500">Jumat, 15:30 WIB</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs">E</div>
+                                            <div>
+                                                <p class="text-sm font-semibold text-slate-800">English Club Debate</p>
+                                                <p class="text-xs text-slate-500">Sabtu, 09:00 WIB</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <hr class="border-slate-100">
+
+                            <!-- Section OSIS -->
+                            <div>
+                                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-1.5">
+                                    <i data-lucide="users" class="w-4 h-4 text-purple-500"></i> Kegiatan OSIS
+                                </h4>
+                                <ul class="space-y-3">
+                                    <li class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-xs">O</div>
+                                            <div>
+                                                <p class="text-sm font-semibold text-slate-800">Rapat Pleno Classmeeting</p>
+                                                <p class="text-xs text-slate-500">Rabu, 14:00 WIB</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+        </div>
+
+        <!-- ================= PAGE 2: PROFIL ================= -->
+        <div id="page-profil" class="page-section hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
+            <div>
+                <h2 class="text-3xl font-extrabold text-slate-900">Profil Sekolah</h2>
+                <p class="text-slate-500 mt-1">Mengenal lebih dekat Visi, Misi, dan Struktur Organisasi SMA Negeri Nusantara.</p>
+            </div>
+
+            <!-- Visi & Misi -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-gradient-to-br from-brand-600 to-brand-800 text-white rounded-3xl p-8 shadow-xl space-y-4">
+                    <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-white backdrop-blur-md">
+                        <i data-lucide="compass" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold">Visi Sekolah</h3>
+                    <p class="text-brand-100 leading-relaxed text-lg italic">
+                        "Menjadi lembaga pendidikan unggul berstandar internasional yang menghasilkan lulusan berkarakter Pancasila, berprestasi akademis, serta menguasai teknologi modern."
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-3xl p-8 border border-slate-200/80 shadow-sm space-y-4">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                        <i data-lucide="target" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-900">Misi Sekolah</h3>
+                    <ul class="space-y-3 text-slate-600 text-sm">
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-500 shrink-0 mt-0.5"></i>
+                            <span>Menyelenggarakan pembelajaran inovatif berbasis Kurikulum Merdeka secara efektif.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-500 shrink-0 mt-0.5"></i>
+                            <span>Meningkatkan pembinaan karakter, moral, dan ketakwaan kepada Tuhan Yang Maha Esa.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-500 shrink-0 mt-0.5"></i>
+                            <span>Fasilitasi pengembangan minat & bakat siswa di bidang riset, olah raga, dan seni.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Struktur Organisasi -->
+            <div class="bg-white rounded-3xl p-8 border border-slate-200/80 shadow-sm space-y-6">
+                <h3 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                    <i data-lucide="git-fork" class="w-6 h-6 text-brand-600"></i> Struktur Organisasi Sekolah
+                </h3>
+                
+                <!-- Tree Diagram -->
+                <div class="flex flex-col items-center space-y-6 pt-4">
+                    <!-- Kepala Sekolah -->
+                    <div class="bg-brand-50 border-2 border-brand-500 p-4 rounded-2xl text-center w-64 shadow-md">
+                        <p class="text-xs text-brand-600 font-bold uppercase">Kepala Sekolah</p>
+                        <p class="font-bold text-slate-900">Dr. H. Abdul Marix, M.Pd.</p>
+                    </div>
+
+                    <div class="w-0.5 h-6 bg-slate-300"></div>
+
+                    <!-- Komite & Wakasek Line -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 w-full">
+                        <div class="bg-slate-50 border border-slate-200 p-3 rounded-xl text-center">
+                            <p class="text-[11px] text-slate-500 font-semibold uppercase">Wakasek Kurikulum</p>
+                            <p class="font-bold text-slate-800 text-sm">Budi Santoso, M.Pd.</p>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 p-3 rounded-xl text-center">
+                            <p class="text-[11px] text-slate-500 font-semibold uppercase">Wakasek Kesiswaan</p>
+                            <p class="font-bold text-slate-800 text-sm">Siti Rahma, S.Pd.</p>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 p-3 rounded-xl text-center">
+                            <p class="text-[11px] text-slate-500 font-semibold uppercase">Wakasek Sarpras</p>
+                            <p class="font-bold text-slate-800 text-sm">Hendra Gunawan, S.T.</p>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 p-3 rounded-xl text-center">
+                            <p class="text-[11px] text-slate-500 font-semibold uppercase">Wakasek Humas</p>
+                            <p class="font-bold text-slate-800 text-sm">Dewi Lestari, M.Si.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PAGE 3: AKADEMIK ================= -->
+        <div id="page-akademik" class="page-section hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+            <div>
+                <h2 class="text-3xl font-extrabold text-slate-900">Informasi Akademik</h2>
+                <p class="text-slate-500 mt-1">Kurikulum pembelajaran dan daftar pendidik profesional kami.</p>
+            </div>
+
+            <!-- Kurikulum -->
+            <div class="bg-white rounded-3xl p-8 border border-slate-200/80 shadow-sm space-y-4">
+                <span class="px-3 py-1 bg-brand-100 text-brand-700 text-xs font-bold rounded-full uppercase">Kurikulum Merdeka</span>
+                <h3 class="text-2xl font-bold text-slate-900">Struktur Kurikulum</h3>
+                <p class="text-slate-600 leading-relaxed text-sm">
+                    SMK ABDEL SCHOOL menerapkan Kurikulum Merdeka yang memberikan keleluasaan kepada pendidik untuk menciptakan pembelajaran berkualitas yang sesuai dengan kebutuhan dan lingkungan belajar peserta didik.
+                </p>
+            </div>
+
+            <!-- Daftar Guru Grid -->
+            <div class="space-y-6">
+                <h3 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                    <i data-lucide="graduation-cap" class="w-6 h-6 text-brand-600"></i> Daftar Guru & Tenaga Pendidik
+                </h3>
+
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                    <div class="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-sm text-center space-y-2">
+                        <img src="images.jfif" class="w-20 h-20 rounded-full mx-auto object-cover border-2 border-brand-500">
+                        <h4 class="font-bold text-slate-900 text-sm">Anton, S.Pd.</h4>
+                        <p class="text-xs text-brand-600 font-medium">B.Italy</p>
+                    </div>
+                    <div class="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-sm text-center space-y-2">
+                        <img src="11.jpg" class="w-20 h-20 rounded-full mx-auto object-cover border-2 border-brand-500">
+                        <h4 class="font-bold text-slate-900 text-sm">Rosidin, M.Si.</h4>
+                        <p class="text-xs text-brand-600 font-medium">olahraga</p>
+                    </div>
+                    <div class="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-sm text-center space-y-2">
+                        <img src="max-verstappen-red-bull-racing.webp" class="w-20 h-20 rounded-full mx-auto object-cover border-2 border-brand-500">
+                        <h4 class="font-bold text-slate-900 text-sm">Steven, M.Pd.</h4>
+                        <p class="text-xs text-brand-600 font-medium">Kesiswaan</p>
+                    </div>
+                    <div class="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-sm text-center space-y-2">
+                        <img src="images (3).jfif" class="w-20 h-20 rounded-full mx-auto object-cover border-2 border-brand-500">
+                        <h4 class="font-bold text-slate-900 text-sm">Khabib, S.T.</h4>
+                        <p class="text-xs text-brand-600 font-medium">Pai</p>
+                    </div>
+                    <div class="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-sm text-center space-y-2">
+                        <img src="images (2).jfif" class="w-20 h-20 rounded-full mx-auto object-cover border-2 border-brand-500">
+                        <h4 class="font-bold text-slate-900 text-sm">Hamilton, M.Hum.</h4>
+                        <p class="text-xs text-brand-600 font-medium">Bahasa Inggris</p>
+                    </div>
+                    <div class="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-sm text-center space-y-2">
+                        <img src="images (1).jfif" class="w-20 h-20 rounded-full mx-auto object-cover border-2 border-brand-500">
+                        <h4 class="font-bold text-slate-900 text-sm">Bagja, S.Pd.</h4>
+                        <p class="text-xs text-brand-600 font-medium">Sejarah</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PAGE 4 & 5: KESISWAAN / PPDB ================= -->
+        <div id="page-kesiswaan" class="page-section hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+            <div>
+                <h2 class="text-3xl font-extrabold text-slate-900">Penerimaan Peserta Didik Baru (PPDB)</h2>
+                <p class="text-slate-500 mt-1">Informasi alur pendaftaran, persyaratan, dan formulir pendaftaran online tahun ajaran 2026/2027.</p>
+            </div>
+
+            <!-- Alur Pendaftaran (1 -> 2 -> 3) -->
+            <div class="bg-white rounded-3xl p-8 border border-slate-200/80 shadow-sm space-y-6">
+                <h3 class="text-xl font-bold text-slate-900 text-center mb-6">Alur Pendaftaran PPDB Online</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+                    <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200 text-center space-y-3 relative">
+                        <div class="w-10 h-10 rounded-full bg-brand-600 text-white font-bold flex items-center justify-center mx-auto text-lg shadow-md">1</div>
+                        <h4 class="font-bold text-slate-900">Pendaftaran Online</h4>
+                        <p class="text-xs text-slate-500">Mengisi formulir pendaftaran online dan melengkapi data pribadi calon siswa.</p>
+                    </div>
+                    <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200 text-center space-y-3 relative">
+                        <div class="w-10 h-10 rounded-full bg-brand-600 text-white font-bold flex items-center justify-center mx-auto text-lg shadow-md">2</div>
+                        <h4 class="font-bold text-slate-900">Verifikasi Berkas</h4>
+                        <p class="text-xs text-slate-500">Panitia memverifikasi dokumen persyaratan dan ijazah/rapor dari sekolah asal.</p>
+                    </div>
+                    <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200 text-center space-y-3 relative">
+                        <div class="w-10 h-10 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center mx-auto text-lg shadow-md">3</div>
+                        <h4 class="font-bold text-slate-900">Pengumuman & Daftar Ulang</h4>
+                        <p class="text-xs text-slate-500">Melihat hasil seleksi secara online dan melakukan konfirmasi daftar ulang.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Persyaratan PDF -->
+                <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm space-y-4">
+                    <h3 class="font-bold text-slate-900 flex items-center gap-2">
+                        <i data-lucide="file-text" class="w-5 h-5 text-brand-600"></i> Persyaratan PDF
+                    </h3>
+                    <p class="text-xs text-slate-500">Unduh petunjuk teknis dan brosur syarat pendaftaran resmi dalam format PDF.</p>
+                    <button class="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center gap-2 transition">
+                        <i data-lucide="download" class="w-4 h-4"></i> Download Syarat PPDB (PDF)
+                    </button>
+                </div>
+
+                <!-- Formulir Online -->
+                <div class="md:col-span-2 bg-white rounded-3xl p-8 border border-slate-200/80 shadow-sm space-y-5">
+                    <h3 class="font-bold text-slate-900 text-lg flex items-center gap-2">
+                        <i data-lucide="edit-3" class="w-5 h-5 text-brand-600"></i> Formulir Online Pendaftaran
+                    </h3>
+                    <form onsubmit="handleFormSubmit(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Nama Lengkap Siswa</label>
+                            <input type="text" required placeholder="Masukkan nama sesuai ijazah" class="w-full text-sm p-3 border rounded-xl outline-none focus:ring-2 focus:ring-brand-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Email Aktif / Orang Tua</label>
+                            <input type="email" required placeholder="contoh@email.com" class="w-full text-sm p-3 border rounded-xl outline-none focus:ring-2 focus:ring-brand-500">
+                        </div>
+                        <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 rounded-xl text-sm shadow-md transition">
+                            Kirim Formulir Pendaftaran (Submit)
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PAGE 6: PORTAL AKADEMIK (DASHBOARD SISWA) ================= -->
+        <div id="page-portal" class="page-section hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+            <div class="bg-brand-900 text-white rounded-3xl p-8 shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <span class="px-3 py-1 bg-brand-800 text-brand-200 text-xs font-semibold rounded-full border border-brand-700">Status: Aktif</span>
+                    <h2 class="text-2xl font-bold mt-2">Selamat Datang, Marko Somadtul Iman</h2>
+                    <p class="text-brand-200 text-sm">NISN: 0054892102 | Kelas: XI IPA 1</p>
+                </div>
+                <button onclick="switchTab('beranda')" class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white text-xs font-semibold rounded-xl backdrop-blur-md transition">
+                    Keluar / Logout
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Jadwal Pelajaran -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm space-y-4">
+                    <h3 class="font-bold text-slate-900 flex items-center gap-2">
+                        <i data-lucide="clock" class="w-5 h-5 text-brand-600"></i> Jadwal Pelajaran (Hari Ini)
+                    </h3>
+                    <ul class="space-y-2 text-xs">
+                        <li class="p-2.5 bg-slate-50 rounded-xl flex justify-between"><span>07:30 - 09:00</span><span class="font-semibold text-slate-800">Matematika Wajib</span></li>
+                        <li class="p-2.5 bg-slate-50 rounded-xl flex justify-between"><span>09:15 - 10:45</span><span class="font-semibold text-slate-800">Fisika</span></li>
+                        <li class="p-2.5 bg-slate-50 rounded-xl flex justify-between"><span>11:00 - 12:30</span><span class="font-semibold text-slate-800">Bahasa Inggris</span></li>
+                    </ul>
+                </div>
+
+                <!-- Nilai Rapor & Absensi -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm space-y-4">
+                    <h3 class="font-bold text-slate-900 flex items-center gap-2">
+                        <i data-lucide="bar-chart-2" class="w-5 h-5 text-emerald-600"></i> Nilai Rapor & Absensi
+                    </h3>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="p-4 bg-emerald-50 rounded-xl text-center">
+                            <p class="text-[10px] text-emerald-600 font-bold uppercase">IPK Semester Ini</p>
+                            <p class="text-2xl font-extrabold text-emerald-700">3.85</p>
+                        </div>
+                        <div class="p-4 bg-brand-50 rounded-xl text-center">
+                            <p class="text-[10px] text-brand-600 font-bold uppercase">Kehadiran</p>
+                            <p class="text-2xl font-extrabold text-brand-700">98%</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pengumuman Guru -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm space-y-4">
+                    <h3 class="font-bold text-slate-900 flex items-center gap-2">
+                        <i data-lucide="bell" class="w-5 h-5 text-amber-500"></i> Pengumuman Guru
+                    </h3>
+                    <div class="p-3 bg-amber-50 border border-amber-200/60 rounded-xl text-xs space-y-1">
+                        <p class="font-bold text-amber-900">Tugas Fisika Bab 4</p>
+                        <p class="text-amber-800">Batas pengumpulan laporan praktikum hari Jumat jam 23:59 WIB.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER SECTION -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-12 border-t border-slate-800 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div class="space-y-3">
+                <span id="footer-school-name" class="font-bold text-white text-base block">SMA ABDEL SCHOOL</span>
+                <p class="leading-relaxed">Mewujudkan generasi unggul, terampil, dan berkarakter mulia demi masa depan bangsa.</p>
+            </div>
+            <div>
+                <h4 class="font-bold text-white text-sm mb-3">Tautan Penting</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" onclick="switchTab('beranda')" class="hover:text-white">Beranda</a></li>
+                    <li><a href="#" onclick="switchTab('profil')" class="hover:text-white">Profil Sekolah</a></li>
+                    <li><a href="#" onclick="switchTab('akademik')" class="hover:text-white">Kalender Akademik</a></li>
+                    <li><a href="#" onclick="switchTab('kesiswaan')" class="hover:text-white">Kegiatan OSIS</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold text-white text-sm mb-3">Alamat & Kontak</h4>
+                <p>Jl. Pendidikan No. 45, Nusantara, Indonesia</p>
+                <p class="mt-2">Email: info@sman1nusantara.sch.id</p>
+                <p>Telp: (021) 555-0199</p>
+            </div>
+            <div>
+                <h4 class="font-bold text-white text-sm mb-3">Peta Lokasi</h4>
+                <div class="bg-slate-800 rounded-xl p-4 text-center border border-slate-700 flex flex-col items-center justify-center gap-2">
+                    <i data-lucide="map-pin" class="w-6 h-6 text-brand-500"></i>
+                    <span>Peta Lokasi Google Maps Sekolah</span>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 mt-8 border-t border-slate-800 text-center text-slate-500">
+            &copy; 2026 SMK ABDEL SCHOOL
+            . All rights reserved.
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Init Lucide Icons
+        lucide.createIcons();
+
+        // Banner Slider State & Auto-Slide Logic
+        let currentSlide = 0;
+        let slideInterval;
+        const totalSlides = 3;
+
+        function showSlide(index) {
+            const slides = document.querySelectorAll('.slide-item');
+            const indicators = document.querySelectorAll('#slide-indicators button');
+
+            slides.forEach((slide, i) => {
+                if (i === index) {
+                    slide.classList.remove('opacity-0');
+                    slide.classList.add('opacity-100');
+                } else {
+                    slide.classList.remove('opacity-100');
+                    slide.classList.add('opacity-0');
+                }
+            });
+
+            indicators.forEach((ind, i) => {
+                if (i === index) {
+                    ind.className = "w-3 h-3 rounded-full bg-white transition";
+                } else {
+                    ind.className = "w-3 h-3 rounded-full bg-white/40 transition";
+                }
+            });
+
+            currentSlide = index;
+
+            // Reset progress bar animation
+            const progressBar = document.getElementById('slider-progress');
+            if (progressBar) {
+                progressBar.classList.remove('animate-progress');
+                void progressBar.offsetWidth; // Trigger reflow
+                progressBar.classList.add('animate-progress');
+            }
+        }
+
+        function nextSlide() {
+            let newIndex = (currentSlide + 1) % totalSlides;
+            showSlide(newIndex);
+        }
+
+        function prevSlide() {
+            let newIndex = (currentSlide - 1 + totalSlides) % totalSlides;
+            showSlide(newIndex);
+        }
+
+        function goToSlide(index) {
+            showSlide(index);
+            restartAutoSlide();
+        }
+
+        function startAutoSlide() {
+            slideInterval = setInterval(nextSlide, 4500);
+        }
+
+        function restartAutoSlide() {
+            clearInterval(slideInterval);
+            startAutoSlide();
+        }
+
+        // Auto pause on slider hover
+        const sliderContainer = document.getElementById('slider-container');
+        if (sliderContainer) {
+            sliderContainer.addEventListener('mouseenter', () => {
+                clearInterval(slideInterval);
+                document.getElementById('slider-progress').classList.add('paused');
+            });
+            sliderContainer.addEventListener('mouseleave', () => {
+                document.getElementById('slider-progress').classList.remove('paused');
+                startAutoSlide();
+            });
+        }
+
+        // Start Auto Slide on page load
+        startAutoSlide();
+
+        // Navigation Tabs Switcher
+        function switchTab(tabId) {
+            document.querySelectorAll('.page-section').forEach(page => {
+                page.classList.add('hidden');
+            });
+
+            const targetPage = document.getElementById('page-' + tabId);
+            if (targetPage) {
+                targetPage.classList.remove('hidden');
+            }
+
+            if(tabId === 'ppdb') {
+                document.getElementById('page-kesiswaan').classList.remove('hidden');
+            }
+
+            document.getElementById('mobile-menu').classList.add('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        function toggleCustomizer() {
+            const panel = document.getElementById('customizer-panel');
+            panel.classList.toggle('hidden');
+        }
+
+        // Helper function for local image file reader
+        function updateImageFromFile(fileInputId, targetImgId) {
+            const input = document.getElementById(fileInputId);
+            if (input && input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById(targetImgId).src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Customizer Updater with File Reader Support
+        function applyCustomizations() {
+            const schoolName = document.getElementById('cust-school-name').value;
+            const principalName = document.getElementById('cust-principal-name').value;
+            const principalSpeech = document.getElementById('cust-principal-speech').value;
+
+            // Apply Text Updates
+            if (schoolName) {
+                document.getElementById('header-school-name').innerText = schoolName;
+                document.getElementById('footer-school-name').innerText = schoolName;
+            }
+            if (principalName) document.getElementById('principal-name').innerText = principalName;
+            if (principalSpeech) document.getElementById('principal-speech').innerText = `"${principalSpeech}"`;
+
+            // Apply Image Files Updates (Read from User's Computer/Phone)
+            updateImageFromFile('file-logo', 'header-logo');
+            updateImageFromFile('file-slide-0', 'img-slide-0');
+            updateImageFromFile('file-slide-1', 'img-slide-1');
+            updateImageFromFile('file-slide-2', 'img-slide-2');
+            updateImageFromFile('file-principal-img', 'principal-img');
+
+            toggleCustomizer();
+            alert('Semua foto dan teks berhasil diperbarui!');
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            alert('Formulir Pendaftaran PPDB Berhasil Dikirim!');
+        }
+    </script>
+</body>
+</html>
